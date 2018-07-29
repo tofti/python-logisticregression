@@ -8,7 +8,7 @@
 
 
 
-![\sigma (t) = \frac{1}{1+e^-t}](http://latex.codecogs.com/gif.download?%5Csigma%20%28t%29%20%3D%20%5Cfrac%7B1%7D%7B1+e%5E-t%7D)
+![\sigma (t) = \frac{1}{1+e^-t}](http://latex.codecogs.com/gif.latex?\sigma&space;(t)&space;=&space;\frac{1}{1&plus;e^-t})
 
 ![h(x_i,\theta) = \frac{1}{1+e^{-x_iT\theta}}](http://latex.codecogs.com/gif.latex?h(x_i,\theta)&space;=&space;\frac{1}{1&plus;e^{-x_iT\theta}})
 
