@@ -6,8 +6,15 @@
 # Resources
 ## Basic Algorithm 
 
-![cost function](http://latex.codecogs.com/gif.download?J%28%5Ctheta%29%20%3D%20%5Csum%5E%7Bm%7D_%7Bi%3D1%7D%20Cost%20%28h%28x_i%2C%20%5Ctheta%29%2C%20y_i%29)
-![sigmod function](http://latex.codecogs.com/gif.download?%5Csigma%20%28t%29%20%3D%20%5Cfrac%7B1%7D%7B1+e%5E-t%7D)
+
+
+![\sigma (t) = \frac{1}{1+e^-t}](http://latex.codecogs.com/gif.download?%5Csigma%20%28t%29%20%3D%20%5Cfrac%7B1%7D%7B1+e%5E-t%7D)
+
+![h(x_i,\theta) = \frac{1}{1+e^{-x_iT\theta}}](http://latex.codecogs.com/gif.latex?h(x_i,\theta)&space;=&space;\frac{1}{1&plus;e^{-x_iT\theta}})
+
+
+![J(\theta)=\sum^{m}_{i=1} Cost (h(x_i, \theta),y_i)](http://latex.codecogs.com/gif.latex?J(\theta)&space;=&space;\sum^{m}_{i=1}&space;Cost&space;(h(x_i,&space;\theta),&space;y_i))
+
 
 # Why not use SciPy?
 [SciPy](https://scipy.org/) has a k-means [implementation](https://docs.scipy.org/doc/scipy/reference/cluster.vq.html). The objective of this work is to build a pure python implementation for the purposes of learning, and helping others learn the k-means algorithm. Interested readers with only minimal python experience will be able to read, and step over this code without the added complexity of a library such as SciPy. It is not by any means intended for production use :)
