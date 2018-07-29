@@ -1,7 +1,6 @@
 # python-logisticregression
 
-Logistic regression is a simple 
-![test](https://latex.codecogs.com/gif.latex?x=x^3)
+
 # Description
 
 # Resources
