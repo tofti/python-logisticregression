@@ -1,4 +1,4 @@
-# python-logisticregression
+# python-logisticregression (work in progress)
 
 
 # Description
