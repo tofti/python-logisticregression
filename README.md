@@ -6,7 +6,7 @@
 ## Basic Algorithm 
 Logistic regression is a statistical model that takes linear combination of real valued inputs, ![x_i](https://latex.codecogs.com/gif.latex?x_i) and model parameters, ![\theta](https://latex.codecogs.com/gif.latex?\theta) to produce a binary classification, ![y](https://latex.codecogs.com/gif.latex?y&space;\in&space;\lbrace0,1\rbrace). The model, i.e. the hypothesis ![h](https://latex.codecogs.com/gif.latex?h) classifies a real valued example using:
 
-![decision](https://latex.codecogs.com/gif.latex?y=\begin{cases}&space;1,&space;&\text{if&space;}&space;h(x_i,\theta)&space;>=&space;0.5\\&space;0&\text{otherwise}&space;\end{cases})
+![decision](https://latex.codecogs.com/gif.latex?y=\begin{cases}&space;1,&space;&\text{if&space;}&space;h(x_i,\theta)&space;>=&space;0.5\\&space;\\0&\text{otherwise}&space;\end{cases})
 
 where 
 
