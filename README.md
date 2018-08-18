@@ -4,14 +4,15 @@
 # Description
 
 ## Basic Algorithm 
-Logistic regression is a statistical model that takes linear combination of real valued inputs, ![x_i](https://latex.codecogs.com/gif.latex?x_i) and model parameters, ![\theta](https://latex.codecogs.com/gif.latex?\theta) to produce a binary classification. The model, or hypothesis ![h](https://latex.codecogs.com/gif.latex?h) classifies a real valued example  using:
-
+Logistic regression is a statistical model that takes linear combination of real valued inputs, ![x_i](https://latex.codecogs.com/gif.latex?x_i) and model parameters, ![\theta](https://latex.codecogs.com/gif.latex?\theta) to produce a binary classification, ![y](https://latex.codecogs.com/gif.latex?y&space;\in&space;\lbrace0,1\rbrace). The model, i.e. the hypothesis ![h](https://latex.codecogs.com/gif.latex?h) classifies a real valued example using:
+![decision](https://latex.codecogs.com/gif.latex?y=&space;\begin{cases}&space;1,&space;&&space;\text{if}\&space;h(x_i,\theta)>=0.5&space;\\&space;0,&space;&&space;\text{otherwise}&space;\end{cases})
+where 
 ![h(x_i,\theta) = \frac{1}{1+e^{-x_i\theta^T}}](https://latex.codecogs.com/gif.latex?h(x_i,\theta)&space;=&space;\frac{1}{1&plus;e^{-x_i\theta^T}})
 
+The above hypothesis function is the linear combination of  ![x_i](https://latex.codecogs.com/gif.latex?x_i) and ![\theta](https://latex.codecogs.com/gif.latex?\theta) used the input to the sigmoid function:
 
+![\sigma (x) = \frac{1}{1+e^{-x}}](http://latex.codecogs.com/gif.latex?\sigma&space;(x)&space;=&space;\frac{1}{1&plus;e^{-x}})
 
-
-![\sigma (x) = \frac{1}{1+e^{-t}}](http://latex.codecogs.com/gif.latex?\sigma&space;(t)&space;=&space;\frac{1}{1&plus;e^{-x}})
 
 
 
@@ -19,9 +20,9 @@ Logistic regression is a statistical model that takes linear combination of real
 
 # Resources
 
-+ ![Washington](http://courses.washington.edu/css490/2012.Winter/lecture_slides/05b_logistic_regression.pdf)
-+ ![](https://ayearofai.com/rohan-1-when-would-i-even-use-a-quadratic-equation-in-the-real-world-13f379edab3b)
-+ ![kaggle](https://www.kaggle.com/uciml/breast-cancer-wisconsin-data)
++ [Washington](http://courses.washington.edu/css490/2012.Winter/lecture_slides/05b_logistic_regression.pdf)
++ [](https://ayearofai.com/rohan-1-when-would-i-even-use-a-quadratic-equation-in-the-real-world-13f379edab3b)
++ [kaggle](https://www.kaggle.com/uciml/breast-cancer-wisconsin-data)
 
 # Why not use SciPy?
 The objective of this work is to build a pure python implementation for the purposes of learning, and helping others learn the logistic regression algorithm. Interested readers with only minimal python experience will be able to read, and step over this code without the added complexity of a library such as SciPy. It is not by any means intended for production use :)
