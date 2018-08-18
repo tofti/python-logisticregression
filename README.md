@@ -4,7 +4,7 @@
 # Description
 
 ## Basic Algorithm 
-Logistic regression is a statistical model that takes linear combination of real valued inputs, ![x_i](https://latex.codecogs.com/gif.latex?x_i) and model parameters, ![\theta](https://latex.codecogs.com/gif.latex?\theta) to produce a binary classification, ![y](https://latex.codecogs.com/gif.latex?y&space;\in&space;\lbrace0,1\rbrace). The model, i.e. the hypothesis ![h](https://latex.codecogs.com/gif.latex?h) classifies a real valued example using:
+In machine learning logistic regression is a statistical model that takes linear combination of real valued inputs, ![x_i](https://latex.codecogs.com/gif.latex?x_i) and model parameters, ![\theta](https://latex.codecogs.com/gif.latex?\theta) to produce a binary classification, i.e. assigns a class label ![y](https://latex.codecogs.com/gif.latex?y&space;\in&space;\lbrace0,1\rbrace). The model, i.e. the hypothesis ![h](https://latex.codecogs.com/gif.latex?h) is the probability an example ![x_i](https://latex.codecogs.com/gif.latex?x_i) having ![yis1](https://latex.codecogs.com/gif.latex?y=1), and a value  ![x_i](https://latex.codecogs.com/gif.latex?x_i) can be classified using:
 
 ![decision](https://latex.codecogs.com/gif.latex?y=\begin{cases}&space;1,&space;&\text{if&space;}&space;h(x_i,\theta)&space;>=&space;0.5\\&space;\\\\0&\text{otherwise}&space;\end{cases})
 
@@ -12,10 +12,13 @@ where
 
 ![h(x_i,\theta) = \frac{1}{1+e^{-x_i\theta^T}}](https://latex.codecogs.com/gif.latex?h(x_i,\theta)&space;=&space;\frac{1}{1&plus;e^{-x_i\theta^T}})
 
-The above hypothesis function is the linear combination of  ![x_i](https://latex.codecogs.com/gif.latex?x_i) and ![\theta](https://latex.codecogs.com/gif.latex?\theta) used the input to the sigmoid function:
+The hypothesis function ![h](https://latex.codecogs.com/gif.latex?h) is the linear combination of ![x_i](https://latex.codecogs.com/gif.latex?x_i) and ![\theta](https://latex.codecogs.com/gif.latex?\theta) used as the input to the sigmoid function:
 
 ![\sigma (x) = \frac{1}{1+e^{-x}}](http://latex.codecogs.com/gif.latex?\sigma&space;(x)&space;=&space;\frac{1}{1&plus;e^{-x}})
 
+The sigmoid function has some interesting properties:
+
+![](https://upload.wikimedia.org/wikipedia/commons/8/88/Logistic-curve.svg)
 
 
 
