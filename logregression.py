@@ -6,10 +6,6 @@ import time
 from data_munging import project_columns, load_csv_to_header_data, fill, load_config, get_header_name_to_idx_maps
 
 
-# http://courses.washington.edu/css490/2012.Winter/lecture_slides/05b_logistic_regression.pdf
-# https://ayearofai.com/rohan-1-when-would-i-even-use-a-quadratic-equation-in-the-real-world-13f379edab3b
-# https://www.kaggle.com/uciml/breast-cancer-wisconsin-data
-
 def logistic(x):
     logit = 1 / (1 + math.exp(-x))
     if 1.0 == logit:
@@ -47,10 +43,10 @@ def percent_correct(x, y, theta):
         if (h_of_x_i < 0.5 and y_i is 0) or (h_of_x_i > 0.5 and y_i is 1):
             correct = correct + 1
     p = correct / n
-    return p
+    return p * 100.0
 
 
-def batch_gradient_descent(x, y, theta, alpha):
+def batch_gradient_descent(x, y, theta, alpha, epochs):
     n = len(theta)
     m = len(x)
 
@@ -60,10 +56,11 @@ def batch_gradient_descent(x, y, theta, alpha):
     sum_logistic_costs.append(logistic_total_cost(x, y, theta))
     thetas.append(list(theta))
 
-    for ixter in range(1, 300):
+    for ixter in range(1, epochs):
+        # convert to list expression
         for j in range(0, n):
-            sum_error = sum((h_of_x(x[i], theta) - y[i]) * x[i][j] for i in range(0, m))
-            theta[j] = theta[j] - alpha * sum_error
+            sum_error_j = sum((h_of_x(x[i], theta) - y[i]) * x[i][j] for i in range(0, m))
+            theta[j] = theta[j] - alpha * sum_error_j
         thetas.append(list(theta))
         sum_logistic_costs.append(logistic_total_cost(x, y, theta))
 
@@ -71,24 +68,22 @@ def batch_gradient_descent(x, y, theta, alpha):
             'logistic_total_cost': sum_logistic_costs}
 
 
-def logistic_regression(data, sample_labels, learning_rate):
+def logistic_regression(data, sample_labels, learning_rate, epochs):
     data_rows = data['rows']
     num_of_features = len(data_rows[0])
-
     add_bias_variable(data)
     theta = fill(0, num_of_features + 1)
-
-    return batch_gradient_descent(data_rows, sample_labels, theta, learning_rate)
+    return batch_gradient_descent(data_rows, sample_labels, theta, learning_rate, epochs)
 
 
 def add_bias_variable(data):
     data_rows = data['rows']
-    # add in dummy variable to the data
+    # add in bias variable to the data
     for sample in data_rows:
         sample.insert(0, 1)
-    headers_w_dummy = list(data['header'])
-    headers_w_dummy.insert(0, 'dummy')
-    idx_to_name, name_to_idx = get_header_name_to_idx_maps(headers_w_dummy)
+    headers_w_bias = list(data['header'])
+    headers_w_bias.insert(0, 'bias')
+    idx_to_name, name_to_idx = get_header_name_to_idx_maps(headers_w_bias)
     data['idx_to_name'] = idx_to_name
     data['name_to_idx'] = name_to_idx
 
@@ -156,7 +151,7 @@ def plot_simple_two_dimensional(log_reg_results, data, class_labels, plot_config
     fig.subplots_adjust(top=0.855)
 
     fig.suptitle('Percent correct='
-                 + '%0.2f' % (percent_corrects[-1:][0] * 100)
+                 + '%0.2f' % (percent_corrects[-1:][0])
                  + '%\n' + '$\\theta=(' + ','.join(['%0.2f' % theta_j for theta_j in final_theta]) + ')$')
 
     fig.savefig(plot_config['output_file_prefix'] + str(int(round(time.time() * 1000))) + ".png")
@@ -187,6 +182,7 @@ def main():
     class_label_col = config['class_label_col']
     class_label_mapping = config['class_label_mapping']
     learning_rate = config['learning_rate']
+    epochs = config['epochs']
 
     class_labels = [class_label_mapping[x[0]] for x in project_columns(all_data, class_label_col)['rows']]
     filtered_data = project_columns(all_data, config['data_project_columns'])
@@ -197,7 +193,7 @@ def main():
 
     del all_data
 
-    log_r = logistic_regression(filtered_data, class_labels, learning_rate)
+    log_r = logistic_regression(filtered_data, class_labels, learning_rate, epochs)
     if 'plot_config' in config:
         plot_config = config['plot_config']
         plot_func_config = config['plot_func']
@@ -205,7 +201,7 @@ def main():
         plot_func(log_r, filtered_data, class_labels, plot_config)
 
     fpc = percent_correct(filtered_data['rows'], class_labels, log_r['final_theta'])
-    pass
+    print("Final theta is {} and final pecrcent correct on training set is: {}".format(log_r['final_theta'], fpc))
 
 
 if __name__ == "__main__": main()
