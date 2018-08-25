@@ -42,7 +42,7 @@ The objective of this work is to build a pure python implementation for the purp
 ## Execution
 Run the code with the python interpreter: 
 
-```python logisticregression.py ./resources/<config.cfg>```
+```python logregression.py ./resources/<config.cfg>```
 
 Where config.cfg is a plain text configuration file. The format of the config file is a python dict with the following fields:
 
@@ -77,7 +77,7 @@ You have to specify:
 I generated some simple two dimensional data that was linearly seperable. The following two plot show in the subplots:
  + left shows the data where red/green are the data points of the two classes, the blue line is the linear seperation according to theta);
  + the middle plot shows the value of ![jtheta](https://latex.codecogs.com/gif.latex?J(\theta));
- + 
+ + the right plot shows the accuracy of [h(x_i,\theta)](https://latex.codecogs.com/gif.latex?h(x_i,\theta)) over the training set.
 
 # Extensions
 + Regularization;
