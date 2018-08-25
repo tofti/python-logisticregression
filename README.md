@@ -25,6 +25,7 @@ One simple cost function is taking the sum of squared difference between y and [
 
 ![cost function](https://latex.codecogs.com/gif.latex?Cost(h_\theta(x),y)&space;=&space;\begin{cases}&space;-log(h_\theta(x))&space;&&space;\text{if&space;}&space;y&space;=&space;1&space;\\\\&space;-log(1-h_\theta(x))&space;&&space;\text{if&space;}&space;y&space;=&space;0&space;\\&space;\end{cases})
 
+
 # Resources
 + [Andrew Ng Lectures](https://www.youtube.com/watch?v=-la3q9d7AKQ)
 + [Washington CSS409 Lecture Notes](http://courses.washington.edu/css490/2012.Winter/lecture_slides/05b_logistic_regression.pdf)
@@ -74,10 +75,16 @@ You have to specify:
  
 # Results
 ## Basic 2D 1 and Basic 2D 2
-I generated some simple two dimensional data that was linearly seperable. The following two plot show in the subplots:
- + left shows the data where red/green are the data points of the two classes, the blue line is the linear seperation according to theta);
- + the middle plot shows the value of ![jtheta](https://latex.codecogs.com/gif.latex?J(\theta));
- + the right plot shows the accuracy of [h(x_i,\theta)](https://latex.codecogs.com/gif.latex?h(x_i,\theta)) over the training set.
+I generated some simple two dimensional data that was linearly seperable (see 2d_1.config and 2d_2.config in the resources directory). The following two plots show:
+ + in the left subplot the data where red/green are the data points of the two classes, the blue line is the linear seperation according to theta);
+ + in the middle subplot the value of ![jtheta](https://latex.codecogs.com/gif.latex?J(\theta));
+ + and in the right subplot the accuracy of [h(x_i,\theta)](https://latex.codecogs.com/gif.latex?h(x_i,\theta)) over the training set.
+
+![results](results/2d_1.png "2D Example 1")
+![results](results/2d_2.png "2D Example 2")
+
+## Wisconsin Breast Cancer Data
+
 
 # Extensions
 + Regularization;
