@@ -25,11 +25,11 @@ One simple cost function is taking the sum of squared difference between y and !
 
 ![cost function](https://latex.codecogs.com/gif.latex?Cost(h_\theta(x),y)&space;=&space;\begin{cases}&space;-log(h_\theta(x))&space;&&space;\text{if&space;}&space;y&space;=&space;1&space;\\\\&space;-log(1-h_\theta(x))&space;&&space;\text{if&space;}&space;y&space;=&space;0&space;\\&space;\end{cases})
 
-When you take the partial derivative of the cost function with respect to  ![\theta](https://latex.codecogs.com/gif.latex?\theta) (a bit beyond my calculus), you get an update function which is amenable to gradient descent i.e. allows you to "walk down" the gradient of the convex cost function to find the minima. For each dimension of the data j:
+When you take the partial derivative of the cost function with respect to ![\theta](https://latex.codecogs.com/gif.latex?\theta) (a bit beyond my calculus), you get an update function which is amenable to gradient descent i.e. allows you to "walk down" the gradient of the convex cost function to find the minima. For each dimension of the data j:
 
 ![grad_descent](https://latex.codecogs.com/gif.latex?\theta_j:=&space;\theta_j&space;-&space;\alpha&space;\sum_{i=1}^{m}&space;(h_\theta(x_i)&space;-&space;y_i)x_i^j)
 
-The ![alpha](https://latex.codecogs.com/gif.latex?\alpha) term is a learning rate and determines the "step-size, i.e. how quickly the algorithm moves down the gradient. In languages that support vectorization all j elements of theta may be updated in a single operation. This gradient descent process is repeated either a fixed number of times, or according to some other termination criteria e.g. accuracy achieved, or limited  improvement in consecutive iterations.
+The ![alpha](https://latex.codecogs.com/gif.latex?\alpha) term is a learning rate and determines the "step-size", i.e. how quickly the algorithm moves down the gradient. In languages that support vectorization all j elements of theta may be updated in a single operation. This gradient descent process is repeated either a fixed number of times, or according to some other termination criteria e.g. accuracy achieved, or limited  improvement in consecutive iterations. The final value of  ![\theta](https://latex.codecogs.com/gif.latex?\theta) can be used to evaluate how well the classifier works with the training set.
 
 # Resources
 + [Andrew Ng Lectures](https://www.youtube.com/watch?v=-la3q9d7AKQ)
@@ -98,4 +98,5 @@ I generated some simple two dimensional data that was linearly seperable (see 2d
 + Regularization;
 + Multi-class;
 + Non linear co-efficients;
++ k-fold cross validation.
  

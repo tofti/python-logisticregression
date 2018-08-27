@@ -112,27 +112,27 @@ def plot_simple_two_dimensional(log_reg_results, data, class_labels, plot_config
     x_axis_min = min(datum[x1_axis_idx] for datum in data_rows)
     x_axis_max = max(datum[x1_axis_idx] for datum in data_rows)
 
-    uniq_class = set(class_labels)
-    for class_label in uniq_class:
+    for class_label in set(class_labels):
         class_label_idx = {idx for idx, label in enumerate(class_labels) if label is class_label}
 
-        dataum_axis_x_data = [datum[x1_axis_idx] for idx, datum in enumerate(data_rows) if
-                              idx in class_label_idx]
-        dataum_axis_y_data = [datum[x2_axis_idx] for idx, datum in enumerate(data_rows) if
-                              idx in class_label_idx]
+        datum_axis_x_data = [datum[x1_axis_idx] for idx, datum in enumerate(data_rows) if
+                             idx in class_label_idx]
+        datum_axis_y_data = [datum[x2_axis_idx] for idx, datum in enumerate(data_rows) if
+                             idx in class_label_idx]
 
         color = plot_config_colors[class_label]
-        data_plot.plot(dataum_axis_x_data, dataum_axis_y_data, marker='o', linestyle='', color=color, markersize=3)
+        data_plot.plot(datum_axis_x_data, datum_axis_y_data, marker='o', linestyle='', color=color, markersize=3)
 
     # plot theta
     final_theta = log_reg_results['final_theta']
 
-    def linear_hyperplane_x2_given_x1(x1):
-        return (final_theta[0] + final_theta[1] * x1) / -final_theta[2]
+    def linear_hyperplane_x_j2_given_x_j1(x1, j_1, j_2, theta):
+        return (theta[0] + theta[j_1] * x1) / -theta[j_2]
 
     data_plot.set_xlabel(x_axis_att)
     data_plot.set_ylabel(y_axis_att)
-    data_plot.plot([x_axis_min, x_axis_max], [linear_hyperplane_x2_given_x1(x1) for x1 in [x_axis_min, x_axis_max]],
+    data_plot.plot([x_axis_min, x_axis_max],
+                   [linear_hyperplane_x_j2_given_x_j1(x1, 1, 2, final_theta) for x1 in [x_axis_min, x_axis_max]],
                    marker='',
                    linestyle='-', color='blue')
 
@@ -156,6 +156,50 @@ def plot_simple_two_dimensional(log_reg_results, data, class_labels, plot_config
 
     fig.savefig(plot_config['output_file_prefix'] + str(int(round(time.time() * 1000))) + ".png")
 
+    fig.show()
+
+
+def plot_multi_dimensional(log_reg_results, data, class_labels, plot_config):
+    dimensions = len(data['rows'][0]) - 1
+    fig, subplots = mplpyplot.subplots(dimensions - 1, dimensions - 1)
+    fig.set_size_inches(24, 24, forward=True)
+    fig.subplots_adjust(top=0.855)
+
+    final_theta = log_reg_results['final_theta']
+    # thetas = log_reg_results['thetas']
+
+    x = data['rows']
+    plot_config_colors = plot_config['colors']
+
+    for x1_axis_idx in range(1, dimensions):
+        for x2_axis_idx in range(1, dimensions):
+            subplot = subplots[x1_axis_idx - 1][x2_axis_idx - 1]
+
+            if x2_axis_idx is 1:
+                subplot.set_ylabel(data['idx_to_name'][x1_axis_idx])
+
+            if x1_axis_idx is dimensions - 1:
+                subplot.set_xlabel(data['idx_to_name'][x2_axis_idx])
+
+            if x2_axis_idx > x1_axis_idx:
+                subplot.axis('off')
+                continue
+
+            if x1_axis_idx == x2_axis_idx:
+                x_j = [x_i[x1_axis_idx] for x_i in x]
+                subplot.hist(x_j, color='blue', edgecolor='black')
+                continue
+
+            # enum_x =  enumerate(x)
+            for class_label in set(class_labels):
+                color = plot_config_colors[class_label]
+                class_label_idx = {idx for idx, label in enumerate(class_labels) if label is class_label}
+                datum_axis_x1_data = [xi[x1_axis_idx] for idx, xi in enumerate(x) if idx in class_label_idx]
+                datum_axis_x2_data = [xi[x2_axis_idx] for idx, xi in enumerate(x) if idx in class_label_idx]
+                subplot.plot(datum_axis_x1_data, datum_axis_x2_data, marker='o', linestyle='', color=color,
+                             markersize=3, alpha=0.1)
+
+    fig.savefig(plot_config['output_file_prefix'] + str(int(round(time.time() * 1000))) + ".png")
     fig.show()
 
 
@@ -201,7 +245,7 @@ def main():
         plot_func(log_r, filtered_data, class_labels, plot_config)
 
     fpc = percent_correct(filtered_data['rows'], class_labels, log_r['final_theta'])
-    print("Final theta is {} and final pecrcent correct on training set is: {}".format(log_r['final_theta'], fpc))
+    print("Final theta is {} and final percent correct on training set is: {}".format(log_r['final_theta'], fpc))
 
 
 if __name__ == "__main__": main()
