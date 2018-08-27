@@ -17,11 +17,11 @@ The sigmoid function has a smooth monotonically increasing value approaching 1 f
 
 ![sigmoid](https://upload.wikimedia.org/wikipedia/commons/8/88/Logistic-curve.svg)
 
-The goal of logistic regression is to find a theta which linearly separates the examples in the training set with the minimal amount of error. The error is modelled by a "cost" function that represents the difference between the labels from the training data set, and the classification of the training data given ![h(x,\theta)](https://latex.codecogs.com/gif.latex?h(x_i,\theta)). Therefore the error function for the training set of m examples is:
+The goal of logistic regression is to find a theta which linearly separates the examples in the training set with the minimal amount of error. The error is modelled by a "cost" function that represents the difference between the labels from the training data set, and the classification of the training data given ![h(x,\theta)](https://latex.codecogs.com/gif.latex?h(x_i,\theta)). The error function for the training set of m examples is:
 
 ![min_cost_function](http://latex.codecogs.com/gif.latex?J(\theta)&space;=&space;\frac{1}{m}\sum^{m}_{i=1}&space;Cost&space;(h(x_i,&space;\theta),&space;y_i))
 
-One simple cost function is taking the sum of squared difference between y and ![h(x_i,\theta)](https://latex.codecogs.com/gif.latex?h(x_i,\theta)) (the function used in least squares regression). It turns out is not that helpful as the the exponential terms in ![h](https://latex.codecogs.com/gif.latex?h) mean that a cost function over theta would be non-convex (have many local minima). If the cost function is convex, it will have only a single minima, therefore it is easier to find the single minimum. The cost function used in logistic regression where h is the sigmoid function, is:
+One simple cost function is taking the sum of squared difference between y and ![h(x_i,\theta)](https://latex.codecogs.com/gif.latex?h(x_i,\theta)) (the function used in least squares regression). It turns out is not that helpful as the the exponential terms in ![h](https://latex.codecogs.com/gif.latex?h) mean that a cost function would be non-convex (have many local minima). If the cost function is convex, it will have only a single minima meaning it is more amenable to optmization (i.e. not require meta-heuristics such as simulated annealing etc). The cost function used in logistic regression where h is the sigmoid function is:
 
 ![cost function](https://latex.codecogs.com/gif.latex?Cost(h_\theta(x),y)&space;=&space;\begin{cases}&space;-log(h_\theta(x))&space;&&space;\text{if&space;}&space;y&space;=&space;1&space;\\\\&space;-log(1-h_\theta(x))&space;&&space;\text{if&space;}&space;y&space;=&space;0&space;\\&space;\end{cases})
 
