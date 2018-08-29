@@ -106,8 +106,6 @@ def plot_simple_two_dimensional(log_reg_results, data, class_labels, plot_config
     logistic_total_costs = log_reg_results['logistic_total_cost']
     percent_corrects = [percent_correct(data_rows, class_labels, theta) for theta in log_reg_results['thetas']]
 
-    epoch = [i for i in range(len(logistic_total_costs))]
-
     # plot data
     x_axis_min = min(datum[x1_axis_idx] for datum in data_rows)
     x_axis_max = max(datum[x1_axis_idx] for datum in data_rows)
@@ -137,6 +135,8 @@ def plot_simple_two_dimensional(log_reg_results, data, class_labels, plot_config
                    linestyle='-', color='blue')
 
     # plot error
+    epoch = [i for i in range(len(logistic_total_costs))]
+
     error_plot = subplots[1]
     error_plot.plot(epoch, [c for c in logistic_total_costs], marker='', linestyle='-', color='blue')
     error_plot.set_xlabel('epoch')
@@ -144,9 +144,8 @@ def plot_simple_two_dimensional(log_reg_results, data, class_labels, plot_config
 
     # plot accuracy
     accuracy_plot = subplots[2]
-    accuracy_plot.plot(epoch, percent_corrects, marker='', linestyle='-', color='red')
-    accuracy_plot.set_xlabel('epoch')
-    accuracy_plot.set_ylabel('% correct')
+    construct_accuracy_plot(accuracy_plot, epoch, percent_corrects)
+
     fig.tight_layout()
     fig.subplots_adjust(top=0.855)
 
@@ -159,21 +158,26 @@ def plot_simple_two_dimensional(log_reg_results, data, class_labels, plot_config
     fig.show()
 
 
+def construct_accuracy_plot(accuracy_plot, epoch, percent_corrects):
+    accuracy_plot.plot(epoch, percent_corrects, marker='', linestyle='-', color='red')
+    accuracy_plot.set_xlabel('epoch')
+    accuracy_plot.set_ylabel('% correct')
+
+
 def plot_multi_dimensional(log_reg_results, data, class_labels, plot_config):
     dimensions = len(data['rows'][0]) - 1
-    fig, subplots = mplpyplot.subplots(dimensions - 1, dimensions - 1)
-    fig.set_size_inches(24, 24, forward=True)
-    fig.subplots_adjust(top=0.855)
+    main_figure, main_figure_subplots = mplpyplot.subplots(dimensions - 1, dimensions - 1)
+    main_figure.set_size_inches(24, 24, forward=True)
+    main_figure.subplots_adjust(top=0.855)
 
     final_theta = log_reg_results['final_theta']
-    # thetas = log_reg_results['thetas']
 
     x = data['rows']
     plot_config_colors = plot_config['colors']
 
     for x1_axis_idx in range(1, dimensions):
         for x2_axis_idx in range(1, dimensions):
-            subplot = subplots[x1_axis_idx - 1][x2_axis_idx - 1]
+            subplot = main_figure_subplots[x1_axis_idx - 1][x2_axis_idx - 1]
 
             if x2_axis_idx is 1:
                 subplot.set_ylabel(data['idx_to_name'][x1_axis_idx])
@@ -199,8 +203,32 @@ def plot_multi_dimensional(log_reg_results, data, class_labels, plot_config):
                 subplot.plot(datum_axis_x1_data, datum_axis_x2_data, marker='o', linestyle='', color=color,
                              markersize=3, alpha=0.1)
 
-    fig.savefig(plot_config['output_file_prefix'] + str(int(round(time.time() * 1000))) + ".png")
-    fig.show()
+    main_figure.savefig(plot_config['output_file_prefix'] + str(int(round(time.time() * 1000))) + ".png")
+    main_figure.show()
+
+    percent_corrects = [percent_correct(x, class_labels, theta) for theta in log_reg_results['thetas']]
+    logistic_total_costs = log_reg_results['logistic_total_cost']
+    epoch = [i for i in range(len(logistic_total_costs))]
+
+    accuracy_cost_figure, accuracy_cost_plots = mplpyplot.subplots(1, 2)
+
+    accuracy_plot = accuracy_cost_plots[0]
+    construct_accuracy_plot(accuracy_plot, epoch, percent_corrects)
+
+    error_plot = accuracy_cost_plots[1]
+    error_plot.plot(epoch, [c for c in logistic_total_costs], marker='', linestyle='-', color='blue')
+    error_plot.set_xlabel('epoch')
+    error_plot.set_ylabel('$J(\\theta) = \sum^{m}_{i=1} Cost (h(x_i, \\theta), y_i)$')
+
+    accuracy_cost_figure.tight_layout()
+    accuracy_cost_figure.subplots_adjust(top=0.855)
+
+    accuracy_cost_figure.suptitle('Percent correct='
+                 + '%0.2f' % (percent_corrects[-1:][0])
+                 + '%\n' + '$\\theta=(' + ','.join(['%0.2f' % theta_j for theta_j in final_theta]) + ')$')
+
+    accuracy_cost_figure.savefig(plot_config['output_file_prefix'] + '-accuracycost-' + str(int(round(time.time() * 1000))) + ".png")
+    accuracy_cost_figure.show()
 
 
 def unit_normalize(data_rows):

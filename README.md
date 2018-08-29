@@ -1,7 +1,7 @@
 # python-logisticregression (work in progress)
 
 # Description
-In machine learning logistic regression is a statistical model that takes linear combination of real valued inputs, ![x_i](https://latex.codecogs.com/gif.latex?x_i) and model parameters, ![\theta](https://latex.codecogs.com/gif.latex?\theta) to produce a binary classification, i.e. assign a class label ![y](https://latex.codecogs.com/gif.latex?y&space;\in&space;\lbrace0,1\rbrace). The model, also referred to as the hypothesis ![h](https://latex.codecogs.com/gif.latex?h) gives the probability an example ![x_i](https://latex.codecogs.com/gif.latex?x_i) having ![yis1](https://latex.codecogs.com/gif.latex?y=1). A value  ![x_i](https://latex.codecogs.com/gif.latex?x_i) can be classified using:
+In machine learning logistic regression is a statistical model that takes linear combination of real valued inputs, ![x_i](https://latex.codecogs.com/gif.latex?x_i) and model parameters, ![\theta](https://latex.codecogs.com/gif.latex?\theta) to produce a binary classification, i.e. assign a class label ![y](https://latex.codecogs.com/gif.latex?y&space;\in&space;\lbrace0,1\rbrace). The model, also referred to as the hypothesis ![h](https://latex.codecogs.com/gif.latex?h) gives the probability an example ![x_i](https://latex.codecogs.com/gif.latex?x_i) having ![yis1](https://latex.codecogs.com/gif.latex?y=1). A value ![x_i](https://latex.codecogs.com/gif.latex?x_i) can be classified using:
 
 ![decision](https://latex.codecogs.com/gif.latex?y=\begin{cases}&space;1,&space;&\text{if&space;}&space;h(x_i,\theta)&space;>=&space;0.5\\&space;\\\\0&\text{otherwise}&space;\end{cases})
 
@@ -21,15 +21,41 @@ The goal of logistic regression is to find a theta which linearly separates the 
 
 ![min_cost_function](http://latex.codecogs.com/gif.latex?J(\theta)&space;=&space;\frac{1}{m}\sum^{m}_{i=1}&space;Cost&space;(h(x_i,&space;\theta),&space;y_i))
 
-One simple cost function is taking the sum of squared difference between y and ![h(x_i,\theta)](https://latex.codecogs.com/gif.latex?h(x_i,\theta)) (the function used in least squares regression). It turns out is not that helpful as the the exponential terms in ![h](https://latex.codecogs.com/gif.latex?h) mean that a cost function would be non-convex (have many local minima). If the cost function is convex, it will have only a single minima meaning it is more amenable to optmization (i.e. not require meta-heuristics such as simulated annealing etc). The cost function used in logistic regression where h is the sigmoid function is:
+One simple cost function is taking the sum of squared difference between y and ![h(x_i,\theta)](https://latex.codecogs.com/gif.latex?h(x_i,\theta)) (the function used in least squares regression). It turns out is not that helpful as the the exponential terms in ![h](https://latex.codecogs.com/gif.latex?h) mean that a cost function would be non-convex (have many local minima). If the cost function is convex, it will have only a single minima meaning is amenable to gradient descent (i.e. not require meta-heuristics such as simulated annealing etc). The cost function used in logistic regression where h is the sigmoid function is:
 
-![cost function](https://latex.codecogs.com/gif.latex?Cost(h_\theta(x),y)&space;=&space;\begin{cases}&space;-log(h_\theta(x))&space;&&space;\text{if&space;}&space;y&space;=&space;1&space;\\\\&space;-log(1-h_\theta(x))&space;&&space;\text{if&space;}&space;y&space;=&space;0&space;\\&space;\end{cases})
+![cost function](https://latex.codecogs.com/gif.latex?Cost(h_\theta(x_i,\theta),y)&space;=&space;\begin{cases}&space;-log(h_\theta(x_i,\theta))&space;&&space;\text{if&space;}y&space;=&space;1&space;\\\\&space;-log(1-h_\theta(x_i,\theta))&space;&&space;\text{if&space;}&space;y&space;=&space;0&space;&space;\end{cases})
 
-When you take the partial derivative of the cost function with respect to ![\theta](https://latex.codecogs.com/gif.latex?\theta) (a bit beyond my calculus), you get an update function which is amenable to gradient descent i.e. allows you to "walk down" the gradient of the convex cost function to find the minima. For each dimension of the data j:
+When you take the partial derivative of the cost function with respect to ![\theta](https://latex.codecogs.com/gif.latex?\theta) (a bit beyond my calculus), you get an update function which is amenable to gradient descent i.e. allows you to "walk down" the gradient of the convex cost function to find the minima. The update function for each dimension of the data j is:
 
 ![grad_descent](https://latex.codecogs.com/gif.latex?\theta_j:=&space;\theta_j&space;-&space;\alpha&space;\sum_{i=1}^{m}&space;(h_\theta(x_i)&space;-&space;y_i)x_i^j)
 
-The ![alpha](https://latex.codecogs.com/gif.latex?\alpha) term is a learning rate and determines the "step-size", i.e. how quickly the algorithm moves down the gradient. In languages that support vectorization all j elements of theta may be updated in a single operation. This gradient descent process is repeated either a fixed number of times, or according to some other termination criteria e.g. accuracy achieved, or limited  improvement in consecutive iterations. The final value of  ![\theta](https://latex.codecogs.com/gif.latex?\theta) can be used to evaluate how well the classifier works with the training set.
+The ![alpha](https://latex.codecogs.com/gif.latex?\alpha) term is a learning rate and determines the "step-size", i.e. how quickly the algorithm moves down the gradient. In languages that support vectorization all j elements of theta may be updated in a single operation. This gradient descent process is repeated either a fixed number of times, or according to some other termination criteria e.g. accuracy achieved, or limited  improvement in consecutive iterations. 
+
+The final value of  ![\theta](https://latex.codecogs.com/gif.latex?\theta) can be used to evaluate how well the classifier works with the training set. [Cross validation](https://en.wikipedia.org/wiki/Cross-validation_(statistics)) can be used to assess the quality of a classifier on a range
+
+## Implementation Notes
+It is common practice to normalize the data before running the logistic regression, and other classification algorithms. This allows each attribute to be plotted on the same axis, whether it be a scatter plot, or a histogram. It also has one additional benefit in that it seems to limit the likelihood of having overflow errors when the dot product of ![x_i](https://latex.codecogs.com/gif.latex?x_i) and ![\theta](https://latex.codecogs.com/gif.latex?\theta) are large. The limits will vary  across computing platforms (languages etc), and data sets, however fixed precision will mean there are values that cause overflow/underflow in the logit function. For example, without normalization the Wisconsin breast cancer data will overflow when theta = (-10.25, 171.78, -57.99, -57.60, -22.20, 0, 0, 0, 0, 0), and x_i = (1, 1.0, 6.0, 8.0, 10.0, 8.0, 10.0, 5.0, 7.0, 1.0) on my platform (Python 3.6.2 v3.6.2:5fd33b5 32 bit Intel on win32). There are some improvements that can be made to make this code more robust, such as those outlined [here](https://stackoverflow.com/questions/37074566/logistic-sigmoid-function-implementation-numerical-precision). However normalizing the wisconsin data on my platform was sufficient to avoid overflow in the logistic function.
+```python
+def logistic(x):
+    logit = 1 / (1 + math.exp(-x))
+    if 1.0 == logit:
+        return logit - sys.float_info.epsilon
+    if 0.0 == logit:
+        return sys.float_info.epsilon
+    return logit
+
+1/(1+math.exp(709.77))
+5.633853888082006e-309
+1/(1+math.exp(709.78))
+5.577796105262746e-309
+1/(1+math.exp(709.79))
+Traceback (most recent call last):
+  File "C:\Program Files\JetBrains\PyCharm Community Edition 2017.2.3\helpers\pydev\_pydevd_bundle\pydevd_exec2.py", line 3, in Exec
+    exec(exp, global_vars, local_vars)
+  File "<input>", line 1, in <module>
+OverflowError: math range error
+```
+One change that I made to the logistic function, again related to float precision, is to avoid the function returning either 1, or 0. Values of 1, and 0 imply a +/- infty input, this is incorrect, and can lead to zero by zeros elsewhere in the code.
 
 # Resources
 + [Andrew Ng Lectures](https://www.youtube.com/watch?v=-la3q9d7AKQ)
@@ -78,13 +104,11 @@ You have to specify:
  + function that can plot data once logistic regression has been completed;
  + plot config is passed to the plot func specified.
  
-## Notes
-+ numeric precision of  
- 
+
 # Results
 ## Basic 2D 1 and Basic 2D 2
-I generated some simple two dimensional data that was linearly seperable (see 2d_1.config and 2d_2.config in the resources directory). The following two plots show:
- + in the left subplot the data where red/green are the data points of the two classes, the blue line is the linear seperation according to theta);
+I generated some simple two dimensional data that was linearly seperable (see 2d_1.config and 2d_2.config in the resources directory) to test the implementation. The following two plots show:
+ + in the left subplot the data where red/green are the data points of the two classes, the blue line is the linear seperation according to theta (i.e. where ![h(x_i,\theta) = 0.5](https://latex.codecogs.com/gif.latex?h(x_i,\theta)&space;=&space;0.5});
  + in the middle subplot the value of ![jtheta](https://latex.codecogs.com/gif.latex?J(\theta));
  + and in the right subplot the accuracy of ![h(x_i,\theta)](https://latex.codecogs.com/gif.latex?h(x_i,\theta)) over the training set.
 
@@ -97,6 +121,6 @@ I generated some simple two dimensional data that was linearly seperable (see 2d
 # Extensions
 + Regularization;
 + Multi-class;
-+ Non linear co-efficients;
++ Non linear co-efficients, i.e. raising elements of x to powers >1;
 + k-fold cross validation.
  
