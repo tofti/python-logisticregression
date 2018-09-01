@@ -40,7 +40,7 @@ def percent_correct(x, y, theta):
         x_i = x[i]
         y_i = y[i]
         h_of_x_i = h_of_x(x_i, theta)
-        if (h_of_x_i < 0.5 and y_i is 0) or (h_of_x_i > 0.5 and y_i is 1):
+        if (h_of_x_i < 0.5 and y_i is 0) or (h_of_x_i >= 0.5 and y_i is 1):
             correct = correct + 1
     p = correct / n
     return p * 100.0
@@ -138,9 +138,7 @@ def plot_simple_two_dimensional(log_reg_results, data, class_labels, plot_config
     epoch = [i for i in range(len(logistic_total_costs))]
 
     error_plot = subplots[1]
-    error_plot.plot(epoch, [c for c in logistic_total_costs], marker='', linestyle='-', color='blue')
-    error_plot.set_xlabel('epoch')
-    error_plot.set_ylabel('$J(\\theta) = \sum^{m}_{i=1} Cost (h(x_i, \\theta), y_i)$')
+    construct_error_plot(epoch, error_plot, logistic_total_costs)
 
     # plot accuracy
     accuracy_plot = subplots[2]
@@ -158,6 +156,12 @@ def plot_simple_two_dimensional(log_reg_results, data, class_labels, plot_config
     fig.show()
 
 
+def construct_error_plot(epoch, error_plot, logistic_total_costs):
+    error_plot.plot(epoch, [c for c in logistic_total_costs], marker='', linestyle='-', color='blue')
+    error_plot.set_xlabel('epoch')
+    error_plot.set_ylabel('$J(\\theta) = \sum^{m}_{i=1} Cost (h(x_i, \\theta), y_i)$')
+
+
 def construct_accuracy_plot(accuracy_plot, epoch, percent_corrects):
     accuracy_plot.plot(epoch, percent_corrects, marker='', linestyle='-', color='red')
     accuracy_plot.set_xlabel('epoch')
@@ -166,7 +170,7 @@ def construct_accuracy_plot(accuracy_plot, epoch, percent_corrects):
 
 def plot_multi_dimensional(log_reg_results, data, class_labels, plot_config):
     dimensions = len(data['rows'][0]) - 1
-    main_figure, main_figure_subplots = mplpyplot.subplots(dimensions - 1, dimensions - 1)
+    main_figure, main_figure_subplots = mplpyplot.subplots(dimensions, dimensions)
     main_figure.set_size_inches(24, 24, forward=True)
     main_figure.subplots_adjust(top=0.855)
 
@@ -175,31 +179,30 @@ def plot_multi_dimensional(log_reg_results, data, class_labels, plot_config):
     x = data['rows']
     plot_config_colors = plot_config['colors']
 
-    for x1_axis_idx in range(1, dimensions):
-        for x2_axis_idx in range(1, dimensions):
-            subplot = main_figure_subplots[x1_axis_idx - 1][x2_axis_idx - 1]
+    for row_idx in range(1, dimensions + 1):
+        for col_idx in range(1, dimensions + 1):
+            subplot = main_figure_subplots[row_idx - 1][col_idx - 1]
 
-            if x2_axis_idx is 1:
-                subplot.set_ylabel(data['idx_to_name'][x1_axis_idx])
+            if col_idx is 1:
+                subplot.set_ylabel(data['idx_to_name'][row_idx])
 
-            if x1_axis_idx is dimensions - 1:
-                subplot.set_xlabel(data['idx_to_name'][x2_axis_idx])
+            if row_idx is dimensions:
+                subplot.set_xlabel(data['idx_to_name'][col_idx])
 
-            if x2_axis_idx > x1_axis_idx:
+            if col_idx > row_idx:
                 subplot.axis('off')
                 continue
 
-            if x1_axis_idx == x2_axis_idx:
-                x_j = [x_i[x1_axis_idx] for x_i in x]
+            if row_idx == col_idx:
+                x_j = [x_i[row_idx] for x_i in x]
                 subplot.hist(x_j, color='blue', edgecolor='black')
                 continue
 
-            # enum_x =  enumerate(x)
             for class_label in set(class_labels):
                 color = plot_config_colors[class_label]
                 class_label_idx = {idx for idx, label in enumerate(class_labels) if label is class_label}
-                datum_axis_x1_data = [xi[x1_axis_idx] for idx, xi in enumerate(x) if idx in class_label_idx]
-                datum_axis_x2_data = [xi[x2_axis_idx] for idx, xi in enumerate(x) if idx in class_label_idx]
+                datum_axis_x1_data = [xi[row_idx] for idx, xi in enumerate(x) if idx in class_label_idx]
+                datum_axis_x2_data = [xi[col_idx] for idx, xi in enumerate(x) if idx in class_label_idx]
                 subplot.plot(datum_axis_x1_data, datum_axis_x2_data, marker='o', linestyle='', color=color,
                              markersize=3, alpha=0.1)
 
@@ -216,13 +219,10 @@ def plot_multi_dimensional(log_reg_results, data, class_labels, plot_config):
     construct_accuracy_plot(accuracy_plot, epoch, percent_corrects)
 
     error_plot = accuracy_cost_plots[1]
-    error_plot.plot(epoch, [c for c in logistic_total_costs], marker='', linestyle='-', color='blue')
-    error_plot.set_xlabel('epoch')
-    error_plot.set_ylabel('$J(\\theta) = \sum^{m}_{i=1} Cost (h(x_i, \\theta), y_i)$')
+    construct_error_plot(epoch, error_plot, logistic_total_costs)
 
     accuracy_cost_figure.tight_layout()
     accuracy_cost_figure.subplots_adjust(top=0.855)
-
     accuracy_cost_figure.suptitle('Percent correct='
                  + '%0.2f' % (percent_corrects[-1:][0])
                  + '%\n' + '$\\theta=(' + ','.join(['%0.2f' % theta_j for theta_j in final_theta]) + ')$')

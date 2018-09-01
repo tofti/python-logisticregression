@@ -13,11 +13,11 @@ The hypothesis function ![h](https://latex.codecogs.com/gif.latex?h) is the line
 
 ![\sigma (t) = \frac{1}{1+e^{-t}}](http://latex.codecogs.com/gif.latex?\sigma&space;(t)&space;=&space;\frac{1}{1&plus;e^{-t}})
 
-The sigmoid function has a smooth monotonically increasing value approaching 1 from 0, which makes it suitable for modelling a probability (in this case that the class label is 1, i.e. ![P(y=1 \mid x; \theta)](https://latex.codecogs.com/gif.latex?P(y=1&space;\mid&space;x;&space;\theta))).
+The sigmoid function has a smooth monotonically increasing value approaching 1 from 0, which makes it suitable for modelling a probability (in this case that the class label is 1, i.e. ![P(y=1 \mid x; \theta)](https://latex.codecogs.com/gif.latex?P(y=1&space;\mid&space;x;&space;\theta)).
 
 ![sigmoid](https://upload.wikimedia.org/wikipedia/commons/8/88/Logistic-curve.svg)
 
-The goal of logistic regression is to find a theta which linearly separates the examples in the training set with the minimal amount of error. The error is modelled by a "cost" function that represents the difference between the labels from the training data set, and the classification of the training data given ![h(x,\theta)](https://latex.codecogs.com/gif.latex?h(x_i,\theta)). The error function for the training set of m examples is:
+The goal of logistic regression is to find a theta which classifies the examples in the training set with the minimal amount of error. The error is modelled by a "cost" function that represents the difference between the labels from the training data set, and the classification of the training data given ![h(x,\theta)](https://latex.codecogs.com/gif.latex?h(x_i,\theta)). The error function for the training set of m examples is:
 
 ![min_cost_function](http://latex.codecogs.com/gif.latex?J(\theta)&space;=&space;\frac{1}{m}\sum^{m}_{i=1}&space;Cost&space;(h(x_i,&space;\theta),&space;y_i))
 
@@ -29,12 +29,12 @@ When you take the partial derivative of the cost function with respect to ![\the
 
 ![grad_descent](https://latex.codecogs.com/gif.latex?\theta_j:=&space;\theta_j&space;-&space;\alpha&space;\sum_{i=1}^{m}&space;(h_\theta(x_i)&space;-&space;y_i)x_i^j)
 
-The ![alpha](https://latex.codecogs.com/gif.latex?\alpha) term is a learning rate and determines the "step-size", i.e. how quickly the algorithm moves down the gradient. In languages that support vectorization all j elements of theta may be updated in a single operation. This gradient descent process is repeated either a fixed number of times, or according to some other termination criteria e.g. accuracy achieved, or limited  improvement in consecutive iterations. 
+The ![alpha](https://latex.codecogs.com/gif.latex?\alpha) term is a learning rate and determines the "step-size", i.e. how quickly the algorithm moves down the gradient. In languages that support vectorization all j elements of theta may be updated in a single operation. This gradient descent process is repeated either a fixed number of times, or according to some other termination criteria e.g. accuracy achieved, or limited  improvement in consecutive iterations. This update function is considered a "batch" optimization as the full set of training updates is evaluated for a single update to ![\theta](https://latex.codecogs.com/gif.latex?\theta), i.e. ![m](https://latex.codecogs.com/gif.latex?m) operations are required to compute the sum for a step down the gradient of the cost function. Other update functions use less updates, play tricks with the size of ![alpha](https://latex.codecogs.com/gif.latex?\alpha) etc, one common is [stochastic gradient descent](https://en.wikipedia.org/wiki/Stochastic_gradient_descent).
 
-The final value of  ![\theta](https://latex.codecogs.com/gif.latex?\theta) can be used to evaluate how well the classifier works with the training set. [Cross validation](https://en.wikipedia.org/wiki/Cross-validation_(statistics)) can be used to assess the quality of a classifier on a range
+The final value of  ![\theta](https://latex.codecogs.com/gif.latex?\theta) can be used to evaluate how well the classifier works with the training set. A classifier may be more thoroughly evaluated using [cross validation](https://en.wikipedia.org/wiki/Cross-validation_(statistics)), different subsets of the universal data set are used as the training set, and test test. 
 
 ## Implementation Notes
-It is common practice to normalize the data before running the logistic regression, and other classification algorithms. This allows each attribute to be plotted on the same axis, whether it be a scatter plot, or a histogram. It also has one additional benefit in that it seems to limit the likelihood of having overflow errors when the dot product of ![x_i](https://latex.codecogs.com/gif.latex?x_i) and ![\theta](https://latex.codecogs.com/gif.latex?\theta) are large. The limits will vary  across computing platforms (languages etc), and data sets, however fixed precision will mean there are values that cause overflow/underflow in the logit function. For example, without normalization the Wisconsin breast cancer data will overflow when theta = (-10.25, 171.78, -57.99, -57.60, -22.20, 0, 0, 0, 0, 0), and x_i = (1, 1.0, 6.0, 8.0, 10.0, 8.0, 10.0, 5.0, 7.0, 1.0) on my platform (Python 3.6.2 v3.6.2:5fd33b5 32 bit Intel on win32). There are some improvements that can be made to make this code more robust, such as those outlined [here](https://stackoverflow.com/questions/37074566/logistic-sigmoid-function-implementation-numerical-precision). However normalizing the wisconsin data on my platform was sufficient to avoid overflow in the logistic function.
+It is common practice to normalize the data before running the logistic regression, and other ML algorithms. This allows each attribute to be plotted on the same axis, whether it be a scatter plot, or a histogram. It also has one additional benefit in that it seems to limit the likelihood of having overflow errors when the dot product of ![x_i](https://latex.codecogs.com/gif.latex?x_i) and ![\theta](https://latex.codecogs.com/gif.latex?\theta) are large. The limits will vary  across computing platforms (languages etc), and data sets, however fixed precision will mean there are values that cause overflow/underflow in the logit function. For example, without normalization the Wisconsin breast cancer data will overflow when theta = (-10.25, 171.78, -57.99, -57.60, -22.20, 0, 0, 0, 0, 0), and x_i = (1, 1.0, 6.0, 8.0, 10.0, 8.0, 10.0, 5.0, 7.0, 1.0) on my platform (Python 3.6.2 v3.6.2:5fd33b5 32 bit Intel on win32). There are some improvements that can be made to make this code more robust, such as those outlined [here](https://stackoverflow.com/questions/37074566/logistic-sigmoid-function-implementation-numerical-precision). However normalizing the wisconsin data on my platform was sufficient to avoid overflow in the logistic function.
 ```python
 def logistic(x):
     logit = 1 / (1 + math.exp(-x))
@@ -55,7 +55,7 @@ Traceback (most recent call last):
   File "<input>", line 1, in <module>
 OverflowError: math range error
 ```
-One change that I made to the logistic function, again related to float precision, is to avoid the function returning either 1, or 0. Values of 1, and 0 imply a +/- infty input, this is incorrect, and can lead to zero by zeros elsewhere in the code.
+One change that I made to the logistic function, again related to float precision, is to avoid the function returning either 1, or 0. Values of 1, and 0 imply a +/- infty input, this is incorrect, and can lead to divide by zeros elsewhere in the code.
 
 # Resources
 + [Andrew Ng Lectures](https://www.youtube.com/watch?v=-la3q9d7AKQ)
@@ -115,8 +115,10 @@ I generated some simple two dimensional data that was linearly seperable (see 2d
 ![results](results/2d_1.png "2D Example 1")
 ![results](results/2d_2.png "2D Example 2")
 
-## Wisconsin Breast Cancer Data
-
+## Wisconsin Breast Cancer Data (Original)
+The [https://archive.ics.uci.edu/ml/datasets/breast+cancer+wisconsin+(original)](wisconsin breast cancer data set) is a well known data set, often used in the machine learning literature. In hindsight this data set is not particularly suited to logistic regression (the values in the )
+![results_wd](results/wisconsin_data.png "Wisconsin Data")
+![results_a](results/2d_1.png "2D Example 1")
 
 # Extensions
 + Regularization;
