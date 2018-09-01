@@ -116,13 +116,14 @@ I generated some simple two dimensional data that was linearly seperable (see 2d
 ![results](results/2d_2.png "2D Example 2")
 
 ## Wisconsin Breast Cancer Data (Original)
-The [https://archive.ics.uci.edu/ml/datasets/breast+cancer+wisconsin+(original)](wisconsin breast cancer data set) is a well known data set, often used in the machine learning literature. In hindsight this data set is not particularly suited to logistic regression (the values in the )
+The [wisconsin breast cancer data set](https://archive.ics.uci.edu/ml/datasets/breast+cancer+wisconsin+(original)) is a well known data set in the machine learning literature, and has been used in several places when [evaluating a logistic regression](https://www.kaggle.com/zzero0/logisticregression-on-breast-cancer-dataset). In hindsight this data set is not particularly suited to logistic regression (the values in the data are more ordinal in nature, and not real values). The results presented here show the raw data including a histogram of each dimension of the data, and a scatter plot for each pair of dimensions. In the scatter plot red/green dots show the two class labels, and the relative saturation of the data point gives some idea of frequency.
 ![results_wd](results/wisconsin_data.png "Wisconsin Data")
-![results_a](results/2d_1.png "2D Example 1")
+![results_a](results/wisconsin-accuracycost.png "Wisconsin")
 
 # Extensions
 + Regularization;
 + Multi-class;
 + Non linear co-efficients, i.e. raising elements of x to powers >1;
-+ k-fold cross validation.
++ k-fold cross validation;
++ stochastic gradient descent.
  
