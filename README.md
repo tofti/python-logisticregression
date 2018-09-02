@@ -1,4 +1,4 @@
-# python-logisticregression (work in progress)
+# python-logisticregression
 
 # Description
 In machine learning logistic regression is a statistical model that takes linear combination of real valued inputs, ![x_i](https://latex.codecogs.com/gif.latex?x_i) and model parameters, ![\theta](https://latex.codecogs.com/gif.latex?\theta) to produce a binary classification, i.e. assign a class label ![y](https://latex.codecogs.com/gif.latex?y&space;\in&space;\lbrace0,1\rbrace). The model, also referred to as the hypothesis ![h](https://latex.codecogs.com/gif.latex?h) gives the probability an example ![x_i](https://latex.codecogs.com/gif.latex?x_i) having ![yis1](https://latex.codecogs.com/gif.latex?y=1). A value ![x_i](https://latex.codecogs.com/gif.latex?x_i) can be classified using:
@@ -116,7 +116,7 @@ I generated some simple two dimensional data that was linearly seperable (see 2d
 ![results](results/2d_2.png "2D Example 2")
 
 ## Wisconsin Breast Cancer Data (Original)
-The [wisconsin breast cancer data set](https://archive.ics.uci.edu/ml/datasets/breast+cancer+wisconsin+(original)) is a well known data set in the machine learning literature, and has been used in several places when [evaluating a logistic regression](https://www.kaggle.com/zzero0/logisticregression-on-breast-cancer-dataset). In hindsight this data set is not particularly suited to logistic regression (the values in the data are more ordinal in nature, and not real values). The results presented here show the raw data including a histogram of each dimension of the data, and a scatter plot for each pair of dimensions. In the scatter plot red/green dots show the two class labels, and the relative saturation of the data point gives some idea of frequency.
+The [wisconsin breast cancer data set](https://archive.ics.uci.edu/ml/datasets/breast+cancer+wisconsin+(original)) is a well known data set in the machine learning literature, and has been used by several authors when [evaluating a logistic regression](https://www.kaggle.com/zzero0/logisticregression-on-breast-cancer-dataset). In hindsight this data set is not particularly suited to logistic regression (the values in the data are more ordinal in nature, and not real values). The results presented here show the raw data including a histogram of each dimension of the data, and a scatter plot for each pair of dimensions. In the scatter plot red/green dots show the two class labels, and the relative saturation of the data point gives some idea of frequency.
 ![results_wd](results/wisconsin_data.png "Wisconsin Data")
 ![results_a](results/wisconsin-accuracycost.png "Wisconsin")
 

@@ -3,6 +3,7 @@ import math
 import sys
 import matplotlib.pyplot as mplpyplot
 import time
+import operator
 from data_munging import project_columns, load_csv_to_header_data, fill, load_config, get_header_name_to_idx_maps
 
 
@@ -163,6 +164,7 @@ def construct_error_plot(epoch, error_plot, logistic_total_costs):
 
 
 def construct_accuracy_plot(accuracy_plot, epoch, percent_corrects):
+
     accuracy_plot.plot(epoch, percent_corrects, marker='', linestyle='-', color='red')
     accuracy_plot.set_xlabel('epoch')
     accuracy_plot.set_ylabel('% correct')
@@ -210,6 +212,8 @@ def plot_multi_dimensional(log_reg_results, data, class_labels, plot_config):
     main_figure.show()
 
     percent_corrects = [percent_correct(x, class_labels, theta) for theta in log_reg_results['thetas']]
+    max_index, max_value = max(enumerate(percent_corrects), key=operator.itemgetter(1))
+
     logistic_total_costs = log_reg_results['logistic_total_cost']
     epoch = [i for i in range(len(logistic_total_costs))]
 
