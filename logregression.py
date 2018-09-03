@@ -89,6 +89,31 @@ def add_bias_variable(data):
     data['name_to_idx'] = name_to_idx
 
 
+def unit_normalize(data_rows):
+    n = len(data_rows)
+    d = len(data_rows[0])
+
+    ranges = [(mni, mxi - mni) for mxi, mni in zip(
+        [max(data_rows[i][j] for i in range(n)) for j in range(d)],
+        [min(data_rows[i][j] for i in range(n)) for j in range(d)])]
+
+    for i in range(n):
+        for j in range(d):
+            data_rows[i][j] = (data_rows[i][j] - ranges[j][0]) / ranges[j][1]
+
+
+def standardize(data_rows):
+    n = len(data_rows)
+    d = len(data_rows[0])
+
+    mean = [sum([data_rows[i][j] for i in range(0, n)]) / n for j in range(0, d)]
+    variance = [sum([(data_rows[i][j] - mean[j]) ** 2 for i in range(0, n)]) / (n - 1) for j in range(0, d)]
+
+    for i in range(n):
+        for j in range(d):
+            data_rows[i][j] = (data_rows[i][j] - mean[j]) / variance[j]
+
+
 def plot_simple_two_dimensional(log_reg_results, data, class_labels, plot_config):
     fig, subplots = mplpyplot.subplots(1, 3)
     fig.set_size_inches(4 * 2, 3, forward=True)
@@ -153,7 +178,6 @@ def plot_simple_two_dimensional(log_reg_results, data, class_labels, plot_config
                  + '%\n' + '$\\theta=(' + ','.join(['%0.2f' % theta_j for theta_j in final_theta]) + ')$')
 
     fig.savefig(plot_config['output_file_prefix'] + str(int(round(time.time() * 1000))) + ".png")
-
     fig.show()
 
 
@@ -164,7 +188,6 @@ def construct_error_plot(epoch, error_plot, logistic_total_costs):
 
 
 def construct_accuracy_plot(accuracy_plot, epoch, percent_corrects):
-
     accuracy_plot.plot(epoch, percent_corrects, marker='', linestyle='-', color='red')
     accuracy_plot.set_xlabel('epoch')
     accuracy_plot.set_ylabel('% correct')
@@ -228,24 +251,13 @@ def plot_multi_dimensional(log_reg_results, data, class_labels, plot_config):
     accuracy_cost_figure.tight_layout()
     accuracy_cost_figure.subplots_adjust(top=0.855)
     accuracy_cost_figure.suptitle('Percent correct='
-                 + '%0.2f' % (percent_corrects[-1:][0])
-                 + '%\n' + '$\\theta=(' + ','.join(['%0.2f' % theta_j for theta_j in final_theta]) + ')$')
+                                  + '%0.2f' % (percent_corrects[-1:][0])
+                                  + '%\n' + '$\\theta=(' + ','.join(
+        ['%0.2f' % theta_j for theta_j in final_theta]) + ')$')
 
-    accuracy_cost_figure.savefig(plot_config['output_file_prefix'] + '-accuracycost-' + str(int(round(time.time() * 1000))) + ".png")
+    accuracy_cost_figure.savefig(
+        plot_config['output_file_prefix'] + '-accuracycost-' + str(int(round(time.time() * 1000))) + ".png")
     accuracy_cost_figure.show()
-
-
-def unit_normalize(data_rows):
-    n = len(data_rows)
-    d = len(data_rows[0])
-
-    ranges = [(mni, mxi - mni) for mxi, mni in zip(
-        [max(data_rows[i][j] for i in range(n)) for j in range(d)],
-        [min(data_rows[i][j] for i in range(n)) for j in range(d)])]
-
-    for i in range(n):
-        for j in range(d):
-            data_rows[i][j] = (data_rows[i][j] - ranges[j][0]) / ranges[j][1]
 
 
 def main():
