@@ -72,7 +72,7 @@ The objective of this work is to build a pure python implementation for the purp
 + matplotlib 2.1.1 - see [here](https://matplotlib.org/users/installing.html) for installation instructions.
 
 ## Execution
-Run the code with the python interpreter: 
+Run the code with the python runtime: 
 
 ```python logregression.py ./resources/<config.cfg>```
 
@@ -88,6 +88,7 @@ Where config.cfg is a plain text configuration file. The format of the config fi
    'data_prep_func' : 'unit_normalize',
    'learning_rate' : 0.025,
    'plot_func' : 'plot_simple_two_dimensional',
+   'gradient_descent_func' : 'stochastic_gradient_descent',
    'plot_config' : {'colors' : {1 : 'green', 0: 'red'},
                     'x-axis-att' : 'x1',
                     'y-axis-att' : 'x2',
@@ -99,9 +100,10 @@ You have to specify:
  + a csv data file;
  + which columns of data to project;
  + which column specifies the class label;
- + how to map the class label to a the binary label {0,1};
+ + how to map the class label to the binary classification {0,1};
  + learning rate, the adaptation speed of the batch gradient descent;
  + function that can plot data once logistic regression has been completed;
+ + function that can be used for gradient descent (batch, or stochastic);
  + plot config is passed to the plot func specified.
  
 
@@ -126,6 +128,4 @@ The results presented here show the data scaled using the min/max scheme in a hi
 + Regularization;
 + Multi-class;
 + Non linear co-efficients, i.e. raising elements of x to powers >1;
-+ k-fold cross validation;
-+ stochastic gradient descent.
- 
++ k-fold cross validation. 
