@@ -1,7 +1,7 @@
 # python-logisticregression
 
 # Description
-In machine learning logistic regression is a statistical model that takes the dot productype of real valued inputs, ![x_i](https://latex.codecogs.com/gif.latex?x_i) and model parameters, ![\theta](https://latex.codecogs.com/gif.latex?\theta) to produce a binary classification, i.e. assign a class label ![y](https://latex.codecogs.com/gif.latex?y&space;\in&space;\lbrace0,1\rbrace). The model, also referred to as the hypothesis ![h](https://latex.codecogs.com/gif.latex?h), gives the probability an example ![x_i](https://latex.codecogs.com/gif.latex?x_i) having ![yis1](https://latex.codecogs.com/gif.latex?y=1). A value ![x_i](https://latex.codecogs.com/gif.latex?x_i) can be classified using:
+In machine learning logistic regression is a statistical model that takes the dot product of real valued inputs, ![x_i](https://latex.codecogs.com/gif.latex?x_i) and model parameters, ![\theta](https://latex.codecogs.com/gif.latex?\theta) to produce a binary classification, i.e. assign a class label ![y](https://latex.codecogs.com/gif.latex?y&space;\in&space;\lbrace0,1\rbrace). The model, also referred to as the hypothesis ![h](https://latex.codecogs.com/gif.latex?h), gives the probability an example ![x_i](https://latex.codecogs.com/gif.latex?x_i) having ![yis1](https://latex.codecogs.com/gif.latex?y=1). A value ![x_i](https://latex.codecogs.com/gif.latex?x_i) can be classified using:
 
 ![decision](https://latex.codecogs.com/gif.latex?y=\begin{cases}&space;1,&space;&\text{if&space;}&space;h(x_i,\theta)&space;>=&space;0.5\\&space;\\\\0&\text{otherwise}&space;\end{cases})
 
