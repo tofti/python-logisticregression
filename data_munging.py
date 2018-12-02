@@ -2,6 +2,7 @@ import ast
 import csv
 import os
 import copy
+import itertools
 
 
 def get_header_name_to_idx_maps(headers):
@@ -72,7 +73,4 @@ def load_config(config_file):
 
 
 def fill(x, n):
-    l = []
-    for i in range(n):
-        l.append(x)
-    return l
+    return list(itertools.repeat(x, n))

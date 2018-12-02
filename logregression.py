@@ -3,7 +3,8 @@ import math
 import sys
 import matplotlib.pyplot as mplpyplot
 import time
-import operator
+import random
+
 from data_munging import project_columns, load_csv_to_header_data, fill, load_config, get_header_name_to_idx_maps
 
 
@@ -57,11 +58,9 @@ def batch_gradient_descent(x, y, theta, alpha, epochs):
     sum_logistic_costs.append(logistic_total_cost(x, y, theta))
     thetas.append(list(theta))
 
-    for ixter in range(1, epochs):
-        # convert to list expression
-        for j in range(0, n):
-            sum_error_j = sum((h_of_x(x[i], theta) - y[i]) * x[i][j] for i in range(0, m))
-            theta[j] = theta[j] - alpha * sum_error_j
+    for e in range(1, epochs):
+        current_theta = list(theta)
+        theta = [theta[j] - alpha * sum((h_of_x(x[i], current_theta) - y[i]) * x[i][j] for i in range(0, m)) for j in range(0, n)]
         thetas.append(list(theta))
         sum_logistic_costs.append(logistic_total_cost(x, y, theta))
 
@@ -69,12 +68,29 @@ def batch_gradient_descent(x, y, theta, alpha, epochs):
             'logistic_total_cost': sum_logistic_costs}
 
 
-def logistic_regression(data, sample_labels, learning_rate, epochs):
+def stochastic_gradient_descent(x, y, theta, alpha, epochs):
+    sum_logistic_costs = []
+    thetas = []
+
+    sum_logistic_costs.append(logistic_total_cost(x, y, theta))
+    thetas.append(list(theta))
+    m = len(x)
+    for e in range(0, epochs):
+        i = random.randrange(0, m)
+        theta = [theta[j] - alpha * (h_of_x(x[i], theta) - y[i]) * x[i][j] for j in range(0, len(theta))]
+        sum_logistic_costs.append(logistic_total_cost(x, y, theta))
+        thetas.append(list(theta))
+
+    return {'final_theta': theta, 'thetas': thetas,
+            'logistic_total_cost': sum_logistic_costs}
+
+
+def logistic_regression(data, sample_labels, learning_rate, epochs, gradient_desc_func):
     data_rows = data['rows']
     num_of_features = len(data_rows[0])
     add_bias_variable(data)
     theta = fill(0, num_of_features + 1)
-    return batch_gradient_descent(data_rows, sample_labels, theta, learning_rate, epochs)
+    return gradient_desc_func(data_rows, sample_labels, theta, learning_rate, epochs)
 
 
 def add_bias_variable(data):
@@ -116,7 +132,7 @@ def standardize(data_rows):
 
 def plot_simple_two_dimensional(log_reg_results, data, class_labels, plot_config):
     fig, subplots = mplpyplot.subplots(1, 3)
-    fig.set_size_inches(4 * 2, 3, forward=True)
+    fig.set_size_inches(3 * 2, 3, forward=True)
     plot_config_colors = plot_config['colors']
 
     x_axis_att = plot_config['x-axis-att']
@@ -191,6 +207,7 @@ def construct_accuracy_plot(accuracy_plot, epoch, percent_corrects):
     accuracy_plot.plot(epoch, percent_corrects, marker='', linestyle='-', color='red')
     accuracy_plot.set_xlabel('epoch')
     accuracy_plot.set_ylabel('% correct')
+    accuracy_plot.set_ylim(50)
 
 
 def plot_multi_dimensional(log_reg_results, data, class_labels, plot_config):
@@ -235,7 +252,6 @@ def plot_multi_dimensional(log_reg_results, data, class_labels, plot_config):
     main_figure.show()
 
     percent_corrects = [percent_correct(x, class_labels, theta) for theta in log_reg_results['thetas']]
-    max_index, max_value = max(enumerate(percent_corrects), key=operator.itemgetter(1))
 
     logistic_total_costs = log_reg_results['logistic_total_cost']
     epoch = [i for i in range(len(logistic_total_costs))]
@@ -281,7 +297,11 @@ def main():
 
     del all_data
 
-    log_r = logistic_regression(filtered_data, class_labels, learning_rate, epochs)
+    gradient_descent_func = batch_gradient_descent
+    if 'gradient_descent_func' in config:
+        gradient_descent_func = globals()[config['gradient_descent_func']]
+
+    log_r = logistic_regression(filtered_data, class_labels, learning_rate, epochs, gradient_descent_func)
     if 'plot_config' in config:
         plot_config = config['plot_config']
         plot_func_config = config['plot_func']
